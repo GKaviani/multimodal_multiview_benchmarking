@@ -1,8 +1,9 @@
 
 import matplotlib.pyplot as plt
+import Timeseries_model
 import Timeseries_model.tisc as tisc
-from timeseries_unimodal.Dataset import TimeSeriesDataset
-from timeseries_unimodal.data_util import *
+from TS_Activity_Recognition.Dataset import TimeSeriesDataset
+from TS_Activity_Recognition.data_util import *
 import yaml
 import argparse
 from torch.utils.data import DataLoader
@@ -23,15 +24,21 @@ def main(config_file=None):
         config['data']['train_data_path'],
         sampling_rate=config['data']['sampling_rate'],
         sequence_length=config['data']['sequence_length'],
-        segments=config['data']['segments']
+        segments=config['data']['segments'],
+        expected_dim= config['data']['expected_dim']
+
     )
-    train_dataloader = DataLoader(train_dataset, batch_size=config['data']['batch_size'], shuffle=True, drop_last=True)
+    _, train_class_weights = create_weighted_sampler_and_class_weights(train_dataset)
+
+
+    train_dataloader = DataLoader(train_dataset, batch_size=config['data']['batch_size'], sampler=torch.utils.data.RandomSampler(train_dataset), drop_last=True) # shuffle=True, can't be used with sampler
 
     val_dataset = TimeSeriesDataset(
         config['data']['val_data_path'],
         sampling_rate=config['data']['sampling_rate'],
         sequence_length=config['data']['sequence_length'],
-        segments=config['data']['segments']
+        segments=config['data']['segments'],
+        expected_dim=config['data']['expected_dim']
     )
     val_dataloader = DataLoader(val_dataset, batch_size=config['data']['batch_size'], drop_last=True)
 
@@ -39,12 +46,14 @@ def main(config_file=None):
         config['data']['test_data_path'],
         sampling_rate=config['data']['sampling_rate'],
         sequence_length=config['data']['sequence_length'],
-        segments=config['data']['segments']
+        segments=config['data']['segments'],
+        expected_dim=config['data']['expected_dim']
     )
     test_dataloader = DataLoader(test_dataset, batch_size=config['data']['batch_size'], drop_last=True)
 
     # Plot label distribution
-    plot_label_distribution(train_dataset, train_dataloader, config['output']['plot_filename'])
+    # plot_label_distribution(train_dataset, train_dataloader, config['output']['plot_filename'])
+
 
     # Model parameters
     Biomonitor_classifier = tisc.build_classifier(
@@ -54,7 +63,8 @@ def main(config_file=None):
         num_layers=config['model']['num_layers'],
         num_classes=len(train_dataset.classes),
         output_base=config['model']['output_base'],
-        output_name=config['model']['output_name']
+        output_name=config['model']['output_name'],
+        class_weight= train_class_weights
     )
 
     # Train the model

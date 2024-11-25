@@ -1,0 +1,22 @@
+data:
+  train_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/IMU_Combined/train"
+  val_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/IMU_Combined/validation"
+  test_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/IMU_Combined/test"
+  sampling_rate: 100
+  sequence_length: 20
+  segments: 20
+  expected_dim: 18
+  batch_size: 16
+
+model:
+  name: "Transformer"
+  dimensions: 18
+  num_layers: 4
+  output_base: "/home/ghazal/Activity_Recognition_benchmarking/timeseries_unimodal/"
+  output_name: "IMU_all_4layer_wf2_lre-5_ep_60"
+  num_epochs: 60
+  learning_rate: 0.0001
+  save_best_only: true
+
+output:
+  plot_filename: "IMU_train_label_distribution"

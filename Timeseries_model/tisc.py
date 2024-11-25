@@ -7,10 +7,8 @@ import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
-import seaborn as sns;
-# plt.rcParams['font.family'] = 'DejaVu Sans'
-# # sns.set_theme(font='IPAexGothic')
-# sns.set_theme(font='DejaVu Sans')
+import seaborn as sns
+
 
 from datetime import datetime
 from importlib import import_module
@@ -27,12 +25,14 @@ class Classifier:
                  model: nn.Module,
                  num_classes: int,
                  output_base: str,
-                 output_name: None,
+                 output_name: str ,
+                 class_weight,
                  device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-                 criterion=nn.CrossEntropyLoss(),
+                 criterion=None,
                  optimizer=optim.Adam,
                  scheduler=None,
-                 classes=None):
+                 classes=None,
+                 ):
 
         self.num_classes = num_classes
         if classes is None:
@@ -40,8 +40,17 @@ class Classifier:
         else:
             self.classes = classes
 
+        if criterion == None:
+
+            if class_weight != None:
+
+                class_weight = class_weight.to(device)
+                criterion = nn.CrossEntropyLoss(weight =class_weight)
+            else:
+
+                criterion == nn.CrossEntropyLoss()
         if num_classes == 2:
-            self.criterion = nn.BCEWithLogitsLoss()
+            criterion = nn.BCEWithLogitsLoss()
 
         self.model_name = model_name
         self.device = device
@@ -75,6 +84,7 @@ class Classifier:
               save_best_only=False,
               lr=None):
         try:
+            # print(f"************* {self.criterion}*****************")
             self.train_model(epochs, train_loader, val_loader, test_loader, save_model, save_checkpoint, save_strategy,
                              save_best_only, lr)
         except KeyboardInterrupt:
@@ -316,7 +326,7 @@ class Classifier:
         print(f"Accuracy: {accuracy}")
 
         if return_report:
-            print(f'******* \n self.classes {self.classes} \n *******')
+            # print(f'******* \n self.classes {self.classes} \n *******')
             report = classification_report(y_true, y_pred, target_names=self.classes , labels= list(range(len(self.classes))))
             print("Classification Scores:\n", report)
 
@@ -561,6 +571,7 @@ def build_classifier(model_name: str,
                      custom_head=None,
                      custom_modules_dir=None,
                      class_labels=None,
+                     class_weight = None,
                      **kwargs) -> Classifier:
     package_dir, registry = make_model_registry(custom_modules_dir)
     if model_name not in registry:
@@ -585,6 +596,7 @@ def build_classifier(model_name: str,
                             num_classes,
                             output_base,
                             output_name,
+                            class_weight,
                             classes=class_labels)
 
     if model_path is not None:
