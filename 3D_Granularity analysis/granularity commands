@@ -1,0 +1,15 @@
+python "./3D_Granularity analysis/run_experiments.py" --epochs 30 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 30 --batch_size 16 --cam_view "cam_1"
+python "./3D_Granularity analysis/run_experiments.py" --epochs 60 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 60 --batch_size 16 --cam_view "cam_1"
+python "./3D_Granularity analysis/run_experiments.py" --epochs 60 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 100 --batch_size 16 --cam_view "cam_1"
+
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 30 --batch_size 16 --cam_view "cam_2"
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 60 --batch_size 16 --cam_view "cam_2"
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 100 --batch_size 16 --cam_view "cam_2"
+
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --gl 30 --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --gl 60 --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --gl 100 --batch_size 8 --cam_view "cam_1" --backbone mViT
+ 
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 30 --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 60 --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "./3D_Granularity analysis/run_experiments.py" --epochs 25 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --gl 100 --batch_size 8 --cam_view "cam_2" --backbone mViT

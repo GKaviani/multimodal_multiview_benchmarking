@@ -1,0 +1,87 @@
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "cam_1"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "cam_1" --sampling "multiple-random"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 16 --cam_view "cam_1"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 16 --cam_view "cam_1" --sampling "multiple-random"
+
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "cam_2"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "cam_2" --sampling "multiple-random"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 16 --cam_view "cam_2"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 16 --cam_view "cam_2" --sampling "multiple-random"
+
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 16 --cam_view "cam_2"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 16 --cam_view "cam_2" --sampling "multiple-random"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 16 --cam_view "cam_1"
+python "./3D_sequence_model/run_experiments.py" --epochs 10 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited set" --batch_size 16 --cam_view "cam_1" --sampling "multiple-random"
+#mvit rgb
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "livingroom" --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited set" --batch_size 8 --cam_view "cam_1" --backbone mViT
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited set" --batch_size 8 --cam_view "cam_2" --backbone mViT
+#swin rgb
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "livingroom" --batch_size 8 --cam_view "cam_1" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 8 --cam_view "cam_1" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 8 --cam_view "cam_1" --backbone swin_t
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "livingroom" --batch_size 8 --cam_view "cam_2" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 8 --cam_view "cam_2" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 8 --cam_view "cam_2" --backbone swin_t
+#running depth
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "depth_1" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited" --batch_size 16 --cam_view "depth_1" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 16 --cam_view "depth_1" --modality "depth"
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "depth_2" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited" --batch_size 16 --cam_view "depth_2" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 16 --cam_view "depth_2" --modality "depth"
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone mViT
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone mViT
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone swin_t
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 8 --cam_view "depth_1" --modality "depth" --backbone swin_t
+
+#running rgbd
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "limited set" --batch_size 16 --cam_view "cam_1"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "livingroom" --batch_size 16 --cam_view "cam_1"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:0" --env "kitchen" --batch_size 16 --cam_view "cam_1"
+
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "limited set" --batch_size 16 --cam_view "cam_2"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "livingroom" --batch_size 16 --cam_view "cam_2"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/" --device "cuda:1" --env "kitchen" --batch_size 16 --cam_view "cam_2"
+
+
+
+# lower levels:
+
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --env "l2_33class" --batch_size 16 --cam_view "cam_1"
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --env "l2_33class" --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --env "l2_33class" --batch_size 16 --cam_view "cam_1" --backbone swin_t
+
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --env "l2_33class" --batch_size 16 --cam_view "cam_2"
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --env "l2_33class" --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --env "l2_33class" --batch_size 16 --cam_view "cam_2" --backbone swin_t
+
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:0" --env "l3_56class" --batch_size 16 --cam_view "cam_1"
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:0" --env "l3_56class" --batch_size 8 --cam_view "cam_1" --backbone mViT
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:0" --env "l3_56class" --batch_size 16 --cam_view "cam_1" --backbone swin_t
+
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:1" --env "l3_56class" --batch_size 16 --cam_view "cam_2"
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:1" --env "l3_56class" --batch_size 8 --cam_view "cam_2" --backbone mViT
+python "/home/ghazal/Activity_Recognition_benchmarking/3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:1" --env "l3_56class" --batch_size 16 --cam_view "cam_2" --backbone swin_t
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_depth_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --env "l2_33class" --batch_size 16 --cam_view "depth_1" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_depth_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:1" --env "l2_33class" --batch_size 16 --cam_view "depth_2" --modality "depth"
+
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_depth_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:0" --env "l3_56class" --batch_size 16 --cam_view "depth_1" --modality "depth"
+python "./3D_sequence_model/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_depth_dataset" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:0" --env "l3_56class" --batch_size 16 --cam_view "depth_2" --modality "depth"
+
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --env "l2_33class" --batch_size 16 --cam_view "cam_1"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l2" --device "cuda:0" --env "l2_33class" --batch_size 16 --cam_view "cam_2"
+
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:1" --env "l3_56class" --batch_size 16 --cam_view "cam_1"
+python "3D_sequence_model_rgbd/run_experiments.py" --epochs 15 --data_dir "/mnt/data-tmp/ghazal/DARai_DATA/l3_rgb_dataset/" --base_dir "/home/ghazal/Activity_Recognition_benchmarking/l3" --device "cuda:1" --env "l3_56class" --batch_size 16 --cam_view "cam_2"

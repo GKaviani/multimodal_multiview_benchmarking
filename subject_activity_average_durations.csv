@@ -1,0 +1,295 @@
+subject_id,activity_name,average_duration
+S18,Making pancake,328.4
+S18,Making a cup of coffee in coffee maker,115.8
+S18,Sleeping,57.13333333333333
+S18,Stocking up pantry,30.6
+S18,Dining,170.6
+S18,Playing video game,108.83333333333334
+S18,Cleaning dishes,164.16666666666669
+S18,Exercising,242.63333333333333
+S18,Using handheld smart devices,63.03333333333333
+S18,Misc,82.9
+S18,Reading,175.43333333333334
+S18,Organizing the kitchen,139.26666666666668
+S18,Writing,84.19999999999999
+S18,Making a salad,505.7
+S18,Cleaning the kitchen,64.1
+S18,Making a cup of instant coffee,98.26666666666667
+S18,Working on a computer,194.73333333333335
+S18,Watching TV,47.233333333333334
+S18,Carrying object,20.7
+S17,Making pancake,141.6
+S17,Making a cup of coffee in coffee maker,66.53333333333333
+S17,Stocking up pantry,32.93333333333333
+S17,Dining,118.36666666666667
+S17,Cleaning dishes,177.23333333333335
+S17,Using handheld smart devices,29.46666666666667
+S17,Misc,39.733333333333334
+S17,Organizing the kitchen,46.266666666666666
+S17,Making a salad,316.6333333333333
+S17,Cleaning the kitchen,61.36666666666667
+S17,Making a cup of instant coffee,49.0
+S11,Making pancake,230.2
+S11,Making a cup of coffee in coffee maker,79.93333333333334
+S11,Sleeping,93.30000000000001
+S11,Stocking up pantry,28.666666666666668
+S11,Dining,225.53333333333333
+S11,Playing video game,126.9
+S11,Cleaning dishes,184.53333333333333
+S11,Exercising,323.56666666666666
+S11,Using handheld smart devices,68.42222222222222
+S11,Misc,120.53333333333335
+S11,Reading,175.93333333333334
+S11,Writing,110.69999999999999
+S11,Making a salad,770.6666666666666
+S11,Cleaning the kitchen,31.466666666666665
+S11,Working on a computer,249.3
+S11,Watching TV,46.6
+S11,Carrying object,19.96666666666667
+S03,Making pancake,164.26666666666665
+S03,Making a cup of coffee in coffee maker,84.66666666666667
+S03,Sleeping,23.400000000000002
+S03,Stocking up pantry,41.3
+S03,Dining,97.46666666666667
+S03,Playing video game,33.733333333333334
+S03,Cleaning dishes,198.4
+S03,Exercising,197.2
+S03,Using handheld smart devices,23.333333333333336
+S03,Misc,22.844444444444445
+S03,Reading,81.33333333333334
+S03,Organizing the kitchen,35.93333333333333
+S03,Writing,16.03333333333333
+S03,Making a salad,347.03333333333336
+S03,Cleaning the kitchen,40.0
+S03,Making a cup of instant coffee,72.2
+S03,Working on a computer,55.86666666666666
+S03,Watching TV,21.266666666666666
+S03,Carrying object,10.700000000000001
+S15,Making pancake,306.06666666666666
+S15,Making a cup of coffee in coffee maker,58.8
+S15,Sleeping,78.3
+S15,Stocking up pantry,48.13333333333333
+S15,Dining,105.8
+S15,Playing video game,106.53333333333333
+S15,Cleaning dishes,132.06666666666666
+S15,Exercising,232.7
+S15,Using handheld smart devices,56.6
+S15,Misc,106.53333333333335
+S15,Reading,98.66666666666667
+S15,Writing,64.03333333333333
+S15,Making a salad,443.8666666666667
+S15,Cleaning the kitchen,60.333333333333336
+S15,Working on a computer,150.83333333333334
+S15,Watching TV,66.1
+S15,Carrying object,22.333333333333336
+S13,Making pancake,240.1
+S13,Making a cup of coffee in coffee maker,152.0
+S13,Sleeping,59.06666666666666
+S13,Stocking up pantry,40.03333333333333
+S13,Dining,168.13333333333333
+S13,Playing video game,69.4
+S13,Cleaning dishes,152.83333333333331
+S13,Exercising,191.63333333333333
+S13,Using handheld smart devices,56.800000000000004
+S13,Misc,106.71666666666668
+S13,Reading,152.3
+S13,Organizing the kitchen,62.5
+S13,Writing,69.06666666666666
+S13,Making a salad,451.0333333333333
+S13,Cleaning the kitchen,57.13333333333333
+S13,Making a cup of instant coffee,112.33333333333333
+S13,Working on a computer,199.7
+S13,Watching TV,98.6
+S13,Carrying object,21.799999999999997
+S14,Making pancake,40.733333333333334
+S14,Stocking up pantry,36.4
+S14,Using handheld smart devices,20.333333333333332
+S14,Misc,106.13333333333334
+S14,Making a salad,609.6
+S04,Making pancake,282.6
+S04,Stocking up pantry,35.93333333333333
+S04,Cleaning dishes,3.933333333333333
+S04,Using handheld smart devices,7.133333333333334
+S04,Making a salad,393.4
+S04,Cleaning the kitchen,10.733333333333333
+S04,Making a cup of instant coffee,50.86666666666667
+S05,Making pancake,188.33333333333334
+S05,Making a cup of coffee in coffee maker,68.66666666666667
+S05,Stocking up pantry,23.366666666666667
+S05,Dining,186.33333333333331
+S05,Cleaning dishes,206.0
+S05,Using handheld smart devices,40.56666666666667
+S05,Misc,18.066666666666666
+S05,Making a salad,244.9666666666667
+S05,Cleaning the kitchen,51.599999999999994
+S05,Making a cup of instant coffee,132.0
+S07,Making pancake,146.7
+S07,Making a cup of coffee in coffee maker,141.66666666666666
+S07,Sleeping,51.46666666666667
+S07,Stocking up pantry,42.86666666666667
+S07,Dining,89.96666666666667
+S07,Playing video game,85.6
+S07,Cleaning dishes,81.16666666666667
+S07,Exercising,215.06666666666666
+S07,Using handheld smart devices,43.666666666666664
+S07,Misc,30.555555555555554
+S07,Reading,125.0
+S07,Writing,58.93333333333333
+S07,Making a salad,357.26666666666665
+S07,Cleaning the kitchen,71.73333333333333
+S07,Making a cup of instant coffee,72.66666666666667
+S07,Working on a computer,97.2
+S07,Watching TV,79.2
+S07,Carrying object,19.4
+S08,Making pancake,212.56666666666666
+S08,Making a cup of coffee in coffee maker,100.4
+S08,Sleeping,1.0
+S08,Stocking up pantry,36.33333333333333
+S08,Dining,85.53333333333333
+S08,Playing video game,34.4
+S08,Cleaning dishes,227.76666666666665
+S08,Exercising,4.4
+S08,Using handheld smart devices,23.844444444444445
+S08,Misc,84.55555555555556
+S08,Reading,111.8
+S08,Writing,0.06666666666666667
+S08,Making a salad,438.0666666666667
+S08,Cleaning the kitchen,73.13333333333333
+S08,Making a cup of instant coffee,49.46666666666667
+S08,Working on a computer,2.466666666666667
+S08,Watching TV,58.13333333333333
+S08,Carrying object,30.6
+S09,Making pancake,171.8
+S09,Making a cup of coffee in coffee maker,95.13333333333334
+S09,Stocking up pantry,48.766666666666666
+S09,Dining,151.36666666666667
+S09,Cleaning dishes,378.1333333333333
+S09,Using handheld smart devices,41.0
+S09,Misc,147.56666666666666
+S09,Making a salad,643.2666666666667
+S09,Cleaning the kitchen,70.9
+S09,Making a cup of instant coffee,103.46666666666667
+S06,Making pancake,213.23333333333335
+S06,Making a cup of coffee in coffee maker,109.46666666666667
+S06,Stocking up pantry,49.333333333333336
+S06,Dining,144.03333333333333
+S06,Cleaning dishes,153.8
+S06,Using handheld smart devices,61.36666666666667
+S06,Misc,61.266666666666666
+S06,Organizing the kitchen,37.53333333333333
+S06,Making a salad,513.7
+S06,Cleaning the kitchen,66.53333333333333
+S06,Making a cup of instant coffee,80.96666666666667
+S12,Making pancake,183.8
+S12,Sleeping,46.266666666666666
+S12,Stocking up pantry,47.733333333333334
+S12,Dining,227.06666666666666
+S12,Playing video game,123.33333333333334
+S12,Cleaning dishes,220.6
+S12,Exercising,159.56666666666666
+S12,Using handheld smart devices,57.111111111111114
+S12,Misc,86.46666666666665
+S12,Reading,140.26666666666665
+S12,Organizing the kitchen,33.46666666666667
+S12,Writing,68.06666666666666
+S12,Making a salad,599.5333333333333
+S12,Cleaning the kitchen,82.2
+S12,Making a cup of instant coffee,81.13333333333334
+S12,Working on a computer,257.9
+S12,Watching TV,50.93333333333334
+S12,Carrying object,23.6
+S16,Making pancake,119.36666666666667
+S16,Making a cup of coffee in coffee maker,162.86666666666667
+S16,Stocking up pantry,57.6
+S16,Dining,122.46666666666667
+S16,Cleaning dishes,302.76666666666665
+S16,Using handheld smart devices,137.53333333333333
+S16,Misc,179.5
+S16,Organizing the kitchen,116.33333333333334
+S16,Making a salad,622.5
+S16,Cleaning the kitchen,53.16666666666667
+S16,Making a cup of instant coffee,74.86666666666666
+S02,Making pancake,337.1333333333333
+S02,Making a cup of coffee in coffee maker,47.06666666666667
+S02,Sleeping,55.266666666666666
+S02,Stocking up pantry,39.0
+S02,Dining,321.8666666666667
+S02,Playing video game,48.43333333333334
+S02,Cleaning dishes,165.06666666666666
+S02,Exercising,182.86666666666667
+S02,Using handheld smart devices,30.050000000000004
+S02,Misc,38.266666666666666
+S02,Reading,83.53333333333333
+S02,Organizing the kitchen,4.6
+S02,Writing,52.93333333333334
+S02,Making a salad,385.0333333333333
+S02,Cleaning the kitchen,96.06666666666666
+S02,Making a cup of instant coffee,78.13333333333334
+S02,Working on a computer,234.7
+S02,Watching TV,15.066666666666666
+S02,Carrying object,15.666666666666668
+S01,Making pancake,195.96666666666667
+S01,Making a cup of coffee in coffee maker,67.2
+S01,Sleeping,70.33333333333333
+S01,Stocking up pantry,27.133333333333333
+S01,Dining,192.9
+S01,Playing video game,196.73333333333332
+S01,Cleaning dishes,228.13333333333333
+S01,Exercising,145.2
+S01,Using handheld smart devices,54.24444444444445
+S01,Misc,176.6666666666667
+S01,Reading,165.4
+S01,Writing,70.6
+S01,Making a salad,298.2
+S01,Cleaning the kitchen,91.56666666666666
+S01,Making a cup of instant coffee,70.13333333333334
+S01,Working on a computer,219.26666666666668
+S01,Watching TV,81.4
+S01,Carrying object,14.533333333333333
+S20,Making pancake,147.93333333333334
+S20,Making a cup of coffee in coffee maker,116.4
+S20,Sleeping,56.3
+S20,Stocking up pantry,24.366666666666667
+S20,Dining,161.16666666666666
+S20,Playing video game,145.4
+S20,Cleaning dishes,195.0
+S20,Exercising,264.1333333333333
+S20,Using handheld smart devices,77.14999999999999
+S20,Misc,77.04444444444444
+S20,Reading,168.63333333333333
+S20,Writing,54.46666666666667
+S20,Making a salad,426.9
+S20,Cleaning the kitchen,71.56666666666666
+S20,Making a cup of instant coffee,129.0
+S20,Working on a computer,199.0
+S20,Watching TV,58.53333333333333
+S20,Carrying object,31.799999999999997
+S10,Making pancake,197.2
+S10,Making a cup of coffee in coffee maker,79.86666666666666
+S10,Sleeping,69.4
+S10,Stocking up pantry,33.333333333333336
+S10,Dining,79.6
+S10,Playing video game,104.03333333333333
+S10,Cleaning dishes,179.8
+S10,Exercising,304.16666666666663
+S10,Using handheld smart devices,48.233333333333334
+S10,Misc,49.68888888888889
+S10,Reading,169.73333333333335
+S10,Organizing the kitchen,80.06666666666666
+S10,Writing,117.30000000000001
+S10,Making a salad,353.76666666666665
+S10,Cleaning the kitchen,59.46666666666666
+S10,Making a cup of instant coffee,86.13333333333334
+S10,Working on a computer,298.3666666666667
+S10,Watching TV,56.166666666666664
+S10,Carrying object,27.96666666666667
+S19,Sleeping,54.86666666666667
+S19,Playing video game,78.46666666666667
+S19,Exercising,228.06666666666666
+S19,Using handheld smart devices,45.333333333333336
+S19,Misc,44.266666666666666
+S19,Reading,174.73333333333332
+S19,Writing,61.8
+S19,Working on a computer,190.13333333333333
+S19,Watching TV,63.8
+S19,Carrying object,28.133333333333333

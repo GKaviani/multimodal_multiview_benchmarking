@@ -1,0 +1,22 @@
+data:
+  train_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/bio_Combined/train"
+  val_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/bio_Combined/validation"
+  test_data_path: "/mnt/data-tmp/ghazal/DARai_DATA/timeseries_data/Data/bio_Combined/test"
+  sampling_rate: 100
+  sequence_length: 20
+  segments: 20
+  expected_dim: 5
+  batch_size: 16
+
+model:
+  name: "Transformer"
+  dimensions: 5
+  num_layers: 4
+  output_base: "/home/ghazal/Activity_Recognition_benchmarking/timeseries_unimodal/"
+  output_name: "BioMonitor_4layer_20s_lre-4_ep_60"
+  num_epochs: 60
+  learning_rate: 0.001
+  save_best_only: true
+
+output:
+  plot_filename: "./bio_train_label_distribution"
