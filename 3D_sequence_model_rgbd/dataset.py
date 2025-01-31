@@ -9,8 +9,8 @@ import random
 from utils import plot_sequences
 
 
-class Custom3DDataset(Dataset):
-    def __init__(self, rgb_root_dir, depth_root_dir, include_classes, cam_view, sequence_length=16, sampling="single-random", transform=None ,depth_transform=None, max_seq=3):
+class Custom4DDataset(Dataset):
+    def __init__(self, rgb_root_dir, depth_root_dir, include_classes, cam_view, sequence_length=16, sampling="single-uniform", transform=None ,depth_transform=None, max_seq=3):
         if cam_view.split("_")[-1] == "1":
             self.rgb_root_dir = os.path.join(rgb_root_dir , "cam_1")
             self.depth_root_dir = os.path.join(depth_root_dir , "depth_1")
@@ -30,6 +30,10 @@ class Custom3DDataset(Dataset):
             self.classes = [cls for cls in os.listdir(self.rgb_root_dir) if cls in include_classes]
         else:
             self.classes = os.listdir(self.rgb_root_dir)
+        try:
+            self.classes.remove("nan")
+        except Exception as e:
+            print(e)
 
         self.class_names = sorted(self.classes)
         self.sequences = self._create_sequences()
@@ -40,6 +44,8 @@ class Custom3DDataset(Dataset):
         for activity in self.classes:
             activity_dir = os.path.join(self.rgb_root_dir, activity)
             frames = sorted(glob(os.path.join(activity_dir, '*.png')))
+            if len(frames) == 0:
+                frames = sorted(glob(os.path.join(activity_dir, '*.jpg')))
             grouped_frames = self._group_frames_by_subject_and_session(frames)
 
             for subject_session in grouped_frames:
@@ -73,6 +79,17 @@ class Custom3DDataset(Dataset):
                     sequence = sorted(random.sample(frames, self.sequence_length))
                     sequences.append((sequence, activity, unique_id))
                     seq_counter += 1
+            elif self.sampling == "single-uniform":
+                seq_counter = 0
+                while seq_counter < self.number_of_seq:
+                    step = max(len(frames) // self.sequence_length, 1)
+                    offset = random.randint(0, step - 1) if step > 1 else 0
+                    sequence = sorted(frames[i] for i in range(offset, len(frames), step)[:self.sequence_length])
+                    sequences.append((sequence, activity, unique_id))
+                    # print(unique_id, subject_session, activity)
+                    # print(step , offset , "\n",sequence , unique_id)
+                    seq_counter += 1
+        # print(f'Grouped sequence {subject_session} {activity}: {sequence}')  # Print the grouped sequence
         return sequences
 
     def _pad_sequence(self, frames):
@@ -151,13 +168,14 @@ depth_transforms = transforms.Compose([
 
 
 # if __name__ == "__main__":
-
-    # train_dataset = Custom3DDataset(rgb_root_dir='/mnt/data-tmp/ghazal/DARai_DATA/rgb_dataset/train', depth_root_dir='/mnt/data-tmp/ghazal/DARai_DATA/depth_dataset/train', include_classes=[],
-    #                                 transform=train_transforms , depth_transform= depth_transforms)
-    # loader = DataLoader(train_dataset , batch_size= 8 ,shuffle=True)
-    #
-    # for x , y , id in loader:
-    #     print(x.shape , y.shape , id.shape)
-    #     for x_x in x:
-    #         print(x_x.shape)
-    #     break
+#
+#     train_dataset = Custom3DDataset(rgb_root_dir='/mnt/data-tmp/ghazal/DARai_DATA/l2_rgb_dataset_w_l1/train', depth_root_dir='/mnt/data-tmp/ghazal/DARai_DATA/l2_depth_dataset/train', include_classes=[],
+#                                     transform=train_transforms , depth_transform= depth_transforms ,cam_view = "cam_1")
+#     print(len(train_dataset))
+#     loader = DataLoader(train_dataset , batch_size= 8 ,shuffle=True)
+#
+#     for x , y , id in loader:
+#         print(x.shape , y.shape , id.shape)
+#         for x_x in x:
+#             print(x_x.shape)
+#         break

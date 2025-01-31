@@ -1,7 +1,7 @@
 import os
 import argparse
 import torch
-from torch.utils.data import DataLoader , random_split
+from torch.utils.data import DataLoader
 from utils import plot_sequences , plot_training_validation_loss_accuracy , plot_confusion_matrix
 from tqdm import tqdm
 import time
@@ -11,7 +11,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision.models.video import r3d_18 , mvit_v2_s
 from torchvision.models.video.swin_transformer import swin3d_t
 from torch.utils.tensorboard import SummaryWriter
-from dataset import Custom3DDataset , train_transforms , test_transforms  ,depth_transforms , mvit_transform , swin_transform
+from dataset import Custom3DDataset, Custom4DDataset, train_transforms , test_transforms  ,depth_transforms , mvit_transform , swin_transform , depth_tt_transforms
 from utils import set_seed
 import json
 from torchmetrics import ConfusionMatrix
@@ -151,18 +151,17 @@ def initialize_model(args , input_channels, pretrained=True):
         new_conv1 = torch.nn.Conv3d(input_channels, old_conv1.out_channels,
                                     kernel_size=old_conv1.kernel_size, stride=old_conv1.stride,
                                     padding=old_conv1.padding, bias=old_conv1.bias)
-
+        with torch.no_grad():
+            # Initialize weights for the new channel dimensions
+            torch.nn.init.kaiming_normal_(new_conv1.weight, mode='fan_out', nonlinearity='relu')
+            if new_conv1.bias is not None:
+                torch.nn.init.constant_(new_conv1.bias, 0)
         if input_channels == 3:
             return model
         else:
-            with torch.no_grad():
-                # Initialize weights for the new channel dimensions
-                torch.nn.init.kaiming_normal_(new_conv1.weight, mode='fan_out', nonlinearity='relu')
-                if new_conv1.bias is not None:
-                    torch.nn.init.constant_(new_conv1.bias, 0)
-
             # Replace the first convolutional layer
             model.stem[0] = new_conv1
+            print(f"return {args.backbone} model with input channel {input_channels}")
             return model
     if args.backbone == "mViT":
         if pretrained:
@@ -170,23 +169,24 @@ def initialize_model(args , input_channels, pretrained=True):
         else:
             model = mvit_v2_s()
         old_first_layer = model.conv_proj
-        new_first_layer = nn.Conv3d(input_channels,old_first_layer.out_channels,
+        new_first_layer = nn.Conv3d(in_channels = input_channels,out_channels = old_first_layer.out_channels,
                                     kernel_size=old_first_layer.kernel_size,
                                     stride=old_first_layer.stride,
                                     padding=old_first_layer.padding,
                                     bias=(old_first_layer.bias is not None))
+        # Reinitialize the weights for the new Conv3d layer
+        nn.init.kaiming_normal_(new_first_layer.weight, mode='fan_out', nonlinearity='relu')
+        if new_first_layer.bias is not None:
+            nn.init.constant_(new_first_layer.bias, 0)
 
         if input_channels == 3:
             return model
         else:
-            # Reinitialize the weights for the new Conv3d layer
-            nn.init.kaiming_normal_(new_first_layer.weight, mode='fan_out', nonlinearity='relu')
-            if new_first_layer.bias is not None:
-                nn.init.constant_(new_first_layer.bias, 0)
             # Replace the original first layer with the new layer
             # print("before" , model.conv_proj)
             model.conv_proj = new_first_layer
             # print("after" ,model.conv_proj)
+            print(f"return {args.backbone} model with input channel {input_channels}")
             return model
     if args.backbone == "swin_t":
         if pretrained:
@@ -202,16 +202,17 @@ def initialize_model(args , input_channels, pretrained=True):
                                     stride=old_first_layer.stride,
                                     padding=old_first_layer.padding,
                                     bias=(old_first_layer.bias is not None))
+        # Reinitialize the weights for the new Conv3d layer
+        nn.init.kaiming_normal_(new_first_layer.weight, mode='fan_out', nonlinearity='relu')
+        if new_first_layer.bias is not None:
+            nn.init.constant_(new_first_layer.bias, 0)
+
         if input_channels == 3:
             return model
         else:
-            # Reinitialize the weights for the new Conv3d layer
-            nn.init.kaiming_normal_(new_first_layer.weight, mode='fan_out', nonlinearity='relu')
-            if new_first_layer.bias is not None:
-                nn.init.constant_(new_first_layer.bias, 0)
-
             # Replace the original Conv3d layer with the new one
             model.patch_embed.proj = new_first_layer
+            print(f"return {args.backbone} model with input channel {input_channels}")
             return model
 
 
@@ -235,18 +236,33 @@ def train_and_evaluate(args):
     else:
         if args.backbone == 'r3d':
             transform = train_transforms
+            depth_transform = depth_transforms
         if args.backbone == 'mViT':
             transform = mvit_transform
+            depth_transform = depth_tt_transforms
         if args.backbone == "swin_t":
             transform = swin_transform
+            depth_transform = depth_tt_transforms
 
-    train_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'train' , args.cam_view), transform=transform , sampling=args.sampling , include_classes= args.gl )
-    val_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'validation' , args.cam_view) , transform=transform , sampling=args.sampling , include_classes= args.gl)
-    test_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'test' , args.cam_view), transform=transform , sampling=args.sampling, include_classes= args.gl)
+    if args.modality == "rgbd":
+        print(f"creating dataset for {args.modality}")
+        depth_data_dir = args.data_dir.replace("rgb_dataset" , "depth_dataset")
+
+        train_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'train'),depth_root_dir =os.path.join(depth_data_dir , 'train') , cam_view= args.cam_view,
+                                        transform=transform, depth_transform =depth_transform, sampling=args.sampling, include_classes=args.gl)
+        val_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'validation'), depth_root_dir =os.path.join(depth_data_dir , 'validation') , cam_view= args.cam_view,
+                                      transform=transform,depth_transform = depth_transform, sampling=args.sampling, include_classes=args.gl)
+        test_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'test') ,depth_root_dir =os.path.join(depth_data_dir ,'test'), cam_view= args.cam_view ,
+                                       transform=transform,depth_transform = depth_transform, sampling=args.sampling, include_classes=args.gl)
+        print(f"size of trainset {len(train_dataset)} \t validationset {len(val_dataset)} \t testset {len(test_dataset)}")
+    else:
+        train_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'train' , args.cam_view), transform=transform , sampling=args.sampling , include_classes= args.gl )
+        val_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'validation' , args.cam_view) , transform=transform , sampling=args.sampling , include_classes= args.gl)
+        test_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'test' , args.cam_view), transform=transform , sampling=args.sampling, include_classes= args.gl)
 
     seq_len = train_dataset.sequence_length
     classes = train_dataset.classes
-    print(f'include classes:{classes}')
+    # print(f'include classes:{classes}')
     sampling_method = train_dataset.sampling
 
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
@@ -262,16 +278,20 @@ def train_and_evaluate(args):
     if args.backbone == "r3d":
         if args.modality == "depth":
             model = initialize_model(args,1 , False)
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
+        if args.modality == "rgbd":
+            model = initialize_model(args, 4, False)
+
         if args.modality == 'rgb':
             model = r3d_18(weights="DEFAULT")
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
 
     if args.backbone == 'mViT':
         if args.modality == "depth":
-
             model = initialize_model(args, 1, False)
-
+            #print(f"initialized {args.backbone} with {args.modality} with input channel 1")
+        if args.modality == "rgbd":
+            model = initialize_model(args, 4, False)
         if args.modality == 'rgb':
             model = mvit_v2_s(weights = "DEFAULT")
 
@@ -287,6 +307,9 @@ def train_and_evaluate(args):
     if args.backbone == 'swin_t':
         if args.modality == "depth":
             model = initialize_model(args, 1, False)
+            #print(f"initialized {args.backbone} with {args.modality} with input channel 1")
+        if args.modality == "rgbd":
+            model = initialize_model(args, 4, False)
 
         if args.modality == 'rgb':
             model = swin3d_t(weights = "DEFAULT")
@@ -297,10 +320,6 @@ def train_and_evaluate(args):
             # If the architecture is wrapped in a Sequential
             in_features = model.head[-1].in_features
         model.head = nn.Linear(in_features, num_classes)
-
-
-
-    # print(model)
 
 
     # Move the model to the appropriate device
@@ -343,7 +362,7 @@ def train_and_evaluate(args):
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
-    early_stopping_patience = args.epochs // 2
+    early_stopping_patience = args.epochs // 1.5
     early_stopping_counter = 0
 
     results = {
@@ -418,7 +437,7 @@ def train_and_evaluate(args):
     writer.close()
 
     # Save the best model weights
-    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}.pth')
+    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.pth')
     torch.save(model.state_dict(), model_path)
     print("checkpoint saved")
 
@@ -427,7 +446,7 @@ def train_and_evaluate(args):
 
     plot_confusion_matrix(val_conf_matrix.cpu().numpy(), classes,
                           os.path.join(figures_dir,
-                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}.png'))
+                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.png'))
     print("confusion matrix saved")
     results['test_loss'] = test_loss
     results['test_acc'] = test_acc
@@ -442,7 +461,7 @@ def train_and_evaluate(args):
     print("result saved")
     # Plot and save the training and validation loss and accuracy
     epochs = range(1, len(train_losses) + 1)
-    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}.png')
+    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.png')
     plot_training_validation_loss_accuracy(epochs, train_losses, val_losses, train_accuracies, val_accuracies,
                                            args.seed, savepath)
     print("accuracy plot saved")
@@ -458,6 +477,7 @@ def check_class_distribution(dataset):
 
 if "__name__ == __main__":
     print("Train and evaluate module as main.")
+    #Test single module
     # main_parser = argparse.ArgumentParser(description='Train and evaluate a 3D ResNet model in main.')
     # main_args = main_parser.parse_args()
     # main_args.seed = 1

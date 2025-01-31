@@ -17,7 +17,7 @@ if __name__ == "__main__":
     parser.add_argument('--base_dir', type=str, default= os.path.dirname(os.path.abspath(__file__)),required=True, help='Directory base for results and figures directories')
     parser.add_argument("--device" , type = str , required=False)
     parser.add_argument("--batch_size" , type = int , default = 8, help = "batch size for the model" )
-    parser.add_argument("--sampling" , type = str , default = "single-random" , help = "sequence sampling method from each input sample")
+    parser.add_argument("--sampling" , type = str , default = "single-uniform" , help = "sequence sampling method from each input sample")
     parser.add_argument('--backbone' , type = str , default= 'r3d' , help = "backbone of the model")
     parser.add_argument("--gl" , type = int , default= 100 , help = "number of classes to train and test on")
     parser.add_argument("--load_model" , type = str , help = "load a checkpoint" )
@@ -25,8 +25,8 @@ if __name__ == "__main__":
     # parser.add_argument("--env", nargs='+', default=['a', 'b', 'c', 'd'])
     parser.add_argument("--modality" , type = str , default = "rgb")
     args = parser.parse_args()
-    seeds = [ 1 , 42 ]
-
+    # seeds = [ 1 ,10 ,42 ]
+    seeds = [1, 42]
     all_train_losses = []
     all_val_losses = []
     all_train_accuracies = []
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                       'std_test_accuracy': np.std(all_test_accuracies)}
     save_results_to_json(average_result,
                          os.path.join(args.base_dir ,"results",
-                                      f"average seed result_{args.modality}_{args.backbone}_{args.sampling}_ep {args.epochs}_B {args.batch_size}_{args.gl}%_{args.cam_view}.json"))
+                                      f"average seed result_{args.modality}_{args.backbone}_{args.sampling}_ep {args.epochs}_B {args.batch_size}_{args.gl}%_{args.cam_view}_{args.data_dir.split('/')[-1]}.json"))
     # Plotting
     epochs = range(1, args.epochs + 1)
 

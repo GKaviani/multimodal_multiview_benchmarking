@@ -7,7 +7,7 @@ from utils import save_results_to_json
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Train and evaluate a 3D ResNet model.')
+    parser = argparse.ArgumentParser(description='Train and evaluate a 4D ResNet model.')
     parser.add_argument('--seed', type=int, help='Random seed')
     parser.add_argument('--epochs', type=int, default=25, help='Number of epochs')
     parser.add_argument('--data_dir', type=str, required=True, help='Directory containing the training and testing data')
@@ -19,10 +19,10 @@ if __name__ == "__main__":
     parser.add_argument("--env" , type = str , default= "both" , help = "set of classes to train and test on")
     parser.add_argument("--load_model" , type = str , help = "load a checkpoint" )
     parser.add_argument("--cam_view" , type = str , default="cam_1")
-    # parser.add_argument("--env", nargs='+', default=['a', 'b', 'c', 'd'])
+
 
     args = parser.parse_args()
-    seeds = [ 1 , 42 ]
+    seeds = [ 1 ,10 , 42 ]
 
     all_train_losses = []
     all_val_losses = []

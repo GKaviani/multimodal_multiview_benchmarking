@@ -11,7 +11,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision.models.video import r3d_18 , mvit_v2_s
 from torchvision.models.video.swin_transformer import swin3d_t
 from torch.utils.tensorboard import SummaryWriter
-from dataset import Custom3DDataset , train_transforms ,depth_transforms , mvit_transform , swin_transform
+from dataset import Custom3DDataset , train_transforms ,depth_transforms , mvit_transform , swin_transform, depth_tt_transforms
 from utils import set_seed
 import json
 from torchmetrics import ConfusionMatrix
@@ -248,17 +248,22 @@ def train_and_evaluate(args):
     else:
         include_classes = []
 
-    if args.cam_view == "depth_1" or args.cam_view == "depth_2":
-        # print(f"cam view is {args.cam_view}")
-        transform = depth_transforms
-    else:
-        if args.backbone == 'r3d':
-            transform = train_transforms
-        if args.backbone == 'mViT':
-            # print("hello! mViT backbone is talking...")
-            transform = mvit_transform
-        if args.backbone == "swin_t":
-            transform = swin_transform
+    if args.backbone == 'r3d':
+        transform = train_transforms
+        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+            # print(f"cam view is {args.cam_view}")
+            transform = depth_transforms
+    if args.backbone == 'mViT':
+        # print("hello! mViT backbone is talking...")
+        transform = mvit_transform
+        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+            # print(f"cam view is {args.cam_view}")
+            transform = depth_tt_transforms
+    if args.backbone == "swin_t":
+        transform = swin_transform
+        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+            # print(f"cam view is {args.cam_view}")
+            transform = depth_tt_transforms
 
     print(f'selected transform for {args.backbone} is {transform} \n')
 

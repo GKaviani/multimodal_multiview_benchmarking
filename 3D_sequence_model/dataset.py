@@ -140,7 +140,12 @@ depth_transforms = transforms.Compose([
     transforms.ToTensor(),  # Convert to tensor and scale to [0, 1]
     transforms.Normalize(mean=[0.5], std=[0.25])  # Normalize around the observed depth range
 ])
-
+depth_tt_transforms = transforms.Compose([
+    transforms.Resize(256, interpolation=InterpolationMode.BILINEAR),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),  # Convert to tensor and scale to [0, 1]
+    transforms.Normalize(mean=[0.5], std=[0.25])  # Normalize around the observed depth range
+])
 mvit_transform = transforms.Compose([
 transforms.Resize(256, interpolation=InterpolationMode.BILINEAR),
         transforms.CenterCrop(224),

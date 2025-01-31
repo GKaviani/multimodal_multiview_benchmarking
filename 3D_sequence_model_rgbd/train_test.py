@@ -10,7 +10,7 @@ from torch import nn, optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision.models.video import r3d_18 , mvit_v2_s
 from torch.utils.tensorboard import SummaryWriter
-from dataset import Custom3DDataset , train_transforms , test_transforms , depth_transforms #train_dataset , test_dataset ,
+from dataset import Custom4DDataset , train_transforms , test_transforms , depth_transforms #train_dataset , test_dataset ,
 from utils import set_seed
 import json
 from torchmetrics import ConfusionMatrix
@@ -267,9 +267,9 @@ def train_and_evaluate(args):
 
     rgb_dir = args.data_dir
     depth_dir = rgb_dir.replace("rgb_" , "depth_")
-    train_dataset = Custom3DDataset(rgb_root_dir=os.path.join(rgb_dir ,'train'),depth_root_dir=os.path.join(depth_dir , "train"), transform=train_transforms , depth_transform=depth_transforms,sampling=args.sampling , include_classes= include_classes , cam_view= args.cam_view)
-    val_dataset = Custom3DDataset(rgb_root_dir=os.path.join(rgb_dir ,'validation'),depth_root_dir=os.path.join(depth_dir , "validation"), transform=train_transforms , depth_transform=depth_transforms , sampling=args.sampling , include_classes= include_classes,cam_view= args.cam_view)
-    test_dataset = Custom3DDataset(rgb_root_dir=os.path.join(rgb_dir ,'test'),depth_root_dir=os.path.join(depth_dir , "test"), transform=train_transforms , depth_transform=depth_transforms, sampling=args.sampling, include_classes= include_classes,cam_view= args.cam_view)
+    train_dataset = Custom4DDataset(rgb_root_dir=os.path.join(rgb_dir, 'train'), depth_root_dir=os.path.join(depth_dir, "train"), transform=train_transforms, depth_transform=depth_transforms, sampling=args.sampling, include_classes= include_classes, cam_view= args.cam_view)
+    val_dataset = Custom4DDataset(rgb_root_dir=os.path.join(rgb_dir, 'validation'), depth_root_dir=os.path.join(depth_dir, "validation"), transform=train_transforms, depth_transform=depth_transforms, sampling=args.sampling, include_classes= include_classes, cam_view= args.cam_view)
+    test_dataset = Custom4DDataset(rgb_root_dir=os.path.join(rgb_dir, 'test'), depth_root_dir=os.path.join(depth_dir, "test"), transform=train_transforms, depth_transform=depth_transforms, sampling=args.sampling, include_classes= include_classes, cam_view= args.cam_view)
 
     seq_len = train_dataset.sequence_length
     classes = train_dataset.classes
