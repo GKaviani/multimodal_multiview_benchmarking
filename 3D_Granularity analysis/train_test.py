@@ -138,10 +138,10 @@ def evaluate_model(model, val_loader, criterion, device, num_classes ):
     return epoch_loss, accuracy.item(), class_accuracy, confusion_matrix
 
 
-def initialize_model(args , input_channels, pretrained=True):
+def initialize_model(args , input_channels):
     # Load the model
     if args.backbone == "r3d":
-        if pretrained:
+        if args.weights:
             model = r3d_18(weights="DEFAULT")
         else:
             model = r3d_18(weights=None)
@@ -164,7 +164,7 @@ def initialize_model(args , input_channels, pretrained=True):
             print(f"return {args.backbone} model with input channel {input_channels}")
             return model
     if args.backbone == "mViT":
-        if pretrained:
+        if args.weights:
             model = mvit_v2_s(weights = "DEFAULT")
         else:
             model = mvit_v2_s()
@@ -186,10 +186,10 @@ def initialize_model(args , input_channels, pretrained=True):
             # print("before" , model.conv_proj)
             model.conv_proj = new_first_layer
             # print("after" ,model.conv_proj)
-            print(f"return {args.backbone} model with input channel {input_channels}")
+            # print(f"return {args.backbone} model with input channel {input_channels}")
             return model
     if args.backbone == "swin_t":
-        if pretrained:
+        if args.weights:
             model = swin3d_t(weights = "DEFAULT")
         else:
             model = swin3d_t()
@@ -232,7 +232,10 @@ def train_and_evaluate(args):
 
 
     if args.cam_view == "depth_1" or args.cam_view == "depth_2":
-        transform = depth_transforms
+        if args.backbone == 'r3d':
+            transform = depth_transforms
+        else:
+            transform = depth_tt_transforms
     else:
         if args.backbone == 'r3d':
             transform = train_transforms
@@ -277,23 +280,31 @@ def train_and_evaluate(args):
     # Initialize the model
     if args.backbone == "r3d":
         if args.modality == "depth":
-            model = initialize_model(args,1 , False)
+            model = initialize_model(args,1)
         if args.modality == "rgbd":
-            model = initialize_model(args, 4, False)
+            model = initialize_model(args, 4)
 
         if args.modality == 'rgb':
-            model = r3d_18(weights="DEFAULT")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = r3d_18(weights="DEFAULT")
+            else:
+                model = r3d_18()
 
         model.fc = nn.Linear(model.fc.in_features, num_classes)
 
     if args.backbone == 'mViT':
         if args.modality == "depth":
-            model = initialize_model(args, 1, False)
-            #print(f"initialized {args.backbone} with {args.modality} with input channel 1")
+            model = initialize_model(args, 1)
+            print(f"initialized {args.backbone} with {args.modality} with input channel 1")
         if args.modality == "rgbd":
-            model = initialize_model(args, 4, False)
+            model = initialize_model(args, 4)
         if args.modality == 'rgb':
-            model = mvit_v2_s(weights = "DEFAULT")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = mvit_v2_s(weights = "DEFAULT")
+            else:
+                model = mvit_v2_s(weights=None)
 
         if hasattr(model.head, 'in_features'):
             in_features = model.head.in_features
@@ -306,13 +317,17 @@ def train_and_evaluate(args):
 
     if args.backbone == 'swin_t':
         if args.modality == "depth":
-            model = initialize_model(args, 1, False)
+            model = initialize_model(args, 1)
             #print(f"initialized {args.backbone} with {args.modality} with input channel 1")
         if args.modality == "rgbd":
-            model = initialize_model(args, 4, False)
+            model = initialize_model(args, 4)
 
         if args.modality == 'rgb':
-            model = swin3d_t(weights = "DEFAULT")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = swin3d_t(weights = "DEFAULT")
+            else:
+                model = swin3d_t(weights = None)
 
         if hasattr(model.head, 'in_features'):
             in_features = model.head.in_features
@@ -362,7 +377,7 @@ def train_and_evaluate(args):
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
-    early_stopping_patience = args.epochs // 1.5
+    early_stopping_patience = args.epochs // 3
     early_stopping_counter = 0
 
     results = {
@@ -437,7 +452,7 @@ def train_and_evaluate(args):
     writer.close()
 
     # Save the best model weights
-    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.pth')
+    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}_weights {args.weights}.pth')
     torch.save(model.state_dict(), model_path)
     print("checkpoint saved")
 
@@ -446,7 +461,7 @@ def train_and_evaluate(args):
 
     plot_confusion_matrix(val_conf_matrix.cpu().numpy(), classes,
                           os.path.join(figures_dir,
-                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.png'))
+                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}_weights {args.weights}.png'))
     print("confusion matrix saved")
     results['test_loss'] = test_loss
     results['test_acc'] = test_acc
@@ -455,13 +470,13 @@ def train_and_evaluate(args):
     print(f'Test Acc: {test_acc:.4f}')
 
     # Save results to JSON file
-    results_path = os.path.join(results_dir, f'result_{args.backbone}_{args.modality}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}.json')
+    results_path = os.path.join(results_dir, f'result_{args.backbone}_{args.modality}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}_weights {args.weights}.json')
     with open(results_path, 'w') as f:
         json.dump(results, f)
     print("result saved")
     # Plot and save the training and validation loss and accuracy
     epochs = range(1, len(train_losses) + 1)
-    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}.png')
+    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.gl}%_{args.cam_view}_{args.data_dir.split("/")[-1]}_weights {args.weights}.png')
     plot_training_validation_loss_accuracy(epochs, train_losses, val_losses, train_accuracies, val_accuracies,
                                            args.seed, savepath)
     print("accuracy plot saved")

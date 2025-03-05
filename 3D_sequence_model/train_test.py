@@ -1,5 +1,5 @@
 import os
-import argparse
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:true"
 import torch
 from torch.utils.data import DataLoader , random_split
 from utils import plot_sequences , plot_training_validation_loss_accuracy , plot_confusion_matrix
@@ -11,7 +11,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision.models.video import r3d_18 , mvit_v2_s
 from torchvision.models.video.swin_transformer import swin3d_t
 from torch.utils.tensorboard import SummaryWriter
-from dataset import Custom3DDataset , train_transforms ,depth_transforms , mvit_transform , swin_transform, depth_tt_transforms
+from dataset import Custom3DDataset, train_transforms, depth_transforms, mvit_transform, swin_transform, \
+    depth_tt_transforms, Custom4DDataset
 from utils import set_seed
 import json
 from torchmetrics import ConfusionMatrix
@@ -139,10 +140,10 @@ def evaluate_model(model, val_loader, criterion, device, num_classes ):
     return epoch_loss, accuracy.item(), class_accuracy, confusion_matrix
 
 
-def initialize_model(args , input_channels, pretrained=True):
+def initialize_model(args , input_channels):
     # Load the model
     if args.backbone == "r3d":
-        if pretrained:
+        if args.weights:
             model = r3d_18(weights="DEFAULT")
         else:
             model = r3d_18(weights=None)
@@ -166,7 +167,7 @@ def initialize_model(args , input_channels, pretrained=True):
             model.stem[0] = new_conv1
             return model
     if args.backbone == "mViT":
-        if pretrained:
+        if args.weights:
             model = mvit_v2_s(weights = "DEFAULT")
         else:
             model = mvit_v2_s()
@@ -190,7 +191,7 @@ def initialize_model(args , input_channels, pretrained=True):
             # print("after" ,model.conv_proj)
             return model
     if args.backbone == "swin_t":
-        if pretrained:
+        if args.weights:
             model = swin3d_t(weights = "DEFAULT")
         else:
             model = swin3d_t()
@@ -248,28 +249,55 @@ def train_and_evaluate(args):
     else:
         include_classes = []
 
-    if args.backbone == 'r3d':
-        transform = train_transforms
-        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
-            # print(f"cam view is {args.cam_view}")
+    # if args.backbone == 'r3d':
+    #     transform = train_transforms
+    #     if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+    #         # print(f"cam view is {args.cam_view}")
+    #         transform = depth_transforms
+    # if args.backbone == 'mViT':
+    #     # print("hello! mViT backbone is talking...")
+    #     transform = mvit_transform
+    #     if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+    #         # print(f"cam view is {args.cam_view}")
+    #         transform = depth_tt_transforms
+    # if args.backbone == "swin_t":
+    #     transform = swin_transform
+    #     if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+    #         # print(f"cam view is {args.cam_view}")
+    #         transform = depth_tt_transforms
+    if args.cam_view == "depth_1" or args.cam_view == "depth_2":
+        if args.backbone == 'r3d':
             transform = depth_transforms
-    if args.backbone == 'mViT':
-        # print("hello! mViT backbone is talking...")
-        transform = mvit_transform
-        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
-            # print(f"cam view is {args.cam_view}")
+        else:
             transform = depth_tt_transforms
-    if args.backbone == "swin_t":
-        transform = swin_transform
-        if args.cam_view == "depth_1" or args.cam_view == "depth_2":
-            # print(f"cam view is {args.cam_view}")
-            transform = depth_tt_transforms
+    else:
+        if args.backbone == 'r3d':
+            transform = train_transforms
+            depth_transform = depth_transforms
+        if args.backbone == 'mViT':
+            transform = mvit_transform
+            depth_transform = depth_tt_transforms
+        if args.backbone == "swin_t":
+            transform = swin_transform
+            depth_transform = depth_tt_transforms
 
     print(f'selected transform for {args.backbone} is {transform} \n')
 
-    train_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'train' , args.cam_view), transform=transform , sampling=args.sampling , include_classes= include_classes )
-    val_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'validation' , args.cam_view) , transform=transform , sampling=args.sampling , include_classes= include_classes)
-    test_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'test' , args.cam_view), transform=transform , sampling=args.sampling, include_classes= include_classes)
+    if args.modality == "rgbd":
+        print(f"creating dataset for {args.modality}")
+        depth_data_dir = args.data_dir.replace("rgb_dataset" , "depth_dataset")
+
+        train_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'train'),depth_root_dir =os.path.join(depth_data_dir , 'train') , cam_view= args.cam_view,
+                                        transform=transform, depth_transform =depth_transform, sampling=args.sampling, include_classes=include_classes)
+        val_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'validation'), depth_root_dir =os.path.join(depth_data_dir , 'validation') , cam_view= args.cam_view,
+                                      transform=transform,depth_transform = depth_transform, sampling=args.sampling, include_classes=include_classes)
+        test_dataset = Custom4DDataset(rgb_root_dir=os.path.join(args.data_dir, 'test') ,depth_root_dir =os.path.join(depth_data_dir ,'test'), cam_view= args.cam_view ,
+                                       transform=transform,depth_transform = depth_transform, sampling=args.sampling, include_classes=include_classes)
+        print(f"size of trainset {len(train_dataset)} \t validationset {len(val_dataset)} \t testset {len(test_dataset)}")
+    else:
+        train_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'train' , args.cam_view), transform=transform , sampling=args.sampling , include_classes= include_classes )
+        val_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'validation' , args.cam_view) , transform=transform , sampling=args.sampling , include_classes= include_classes)
+        test_dataset = Custom3DDataset(root_dir=os.path.join(args.data_dir, 'test' , args.cam_view), transform=transform , sampling=args.sampling, include_classes= include_classes)
 
     seq_len = train_dataset.sequence_length
     classes = train_dataset.classes
@@ -288,18 +316,36 @@ def train_and_evaluate(args):
     # Initialize the model
     if args.backbone == "r3d":
         if args.modality == "depth":
-            model = initialize_model(args,1 , False)
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args,1 )
+        if args.modality == "rgbd":
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args, 4)
+        #model.fc = nn.Linear(model.fc.in_features, num_classes)
+
         if args.modality == 'rgb':
-            model = r3d_18(weights="DEFAULT")
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
+            print(f"initialized model for {args.modality} {args.backbone}")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = r3d_18(weights="DEFAULT")
+            else:
+                model = r3d_18()
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
 
     if args.backbone == 'mViT':
         if args.modality == "depth":
-            model = initialize_model(args, 1, False)
-
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args, 1)
+        if args.modality == "rgbd":
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args, 4)
         if args.modality == 'rgb':
-            model = mvit_v2_s(weights='DEFAULT')
+            print(f"initialized model for {args.modality} {args.backbone}")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = mvit_v2_s(weights='DEFAULT')
+            else:
+                model = mvit_v2_s(weights=None)
 
         if hasattr(model.head, 'in_features'):
             in_features = model.head.in_features
@@ -310,10 +356,18 @@ def train_and_evaluate(args):
         model.head = nn.Linear(in_features, num_classes)
     if args.backbone == 'swin_t':
         if args.modality == "depth":
-            model = initialize_model(args, 1, False)
-
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args, 1)
+        if args.modality == "rgbd":
+            print(f"initialized model for {args.modality} {args.backbone}")
+            model = initialize_model(args, 4)
         if args.modality == 'rgb':
-            model = swin3d_t(weights = "DEFAULT")
+            print(f"initialized model for {args.modality} {args.backbone}")
+            if args.weights:
+                print(f"Using pretrained weights")
+                model = swin3d_t(weights = "DEFAULT")
+            else:
+                model = swin3d_t(weights=None)
 
         if hasattr(model.head, 'in_features'):
             in_features = model.head.in_features
@@ -367,7 +421,9 @@ def train_and_evaluate(args):
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
-    early_stopping_patience = args.epochs // 2
+    early_stopping_patience = args.epochs // 3
+    if args.modality == "rgbd":
+        early_stopping_patience = args.epochs // 2
     early_stopping_counter = 0
 
     results = {
@@ -442,7 +498,7 @@ def train_and_evaluate(args):
     writer.close()
 
     # Save the best model weights
-    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.env}_{args.cam_view}.pth')
+    model_path = os.path.join(checkpoints_dir, f'best_3d_resnet_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.env}_{args.cam_view}_weights {args.weights}.pth')
     torch.save(model.state_dict(), model_path)
     print("checkpoint saved")
 
@@ -451,7 +507,7 @@ def train_and_evaluate(args):
 
     plot_confusion_matrix(val_conf_matrix.cpu().numpy(), classes,
                           os.path.join(figures_dir,
-                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.env}_{args.cam_view}.png'))
+                                       f'confusion_matrix_{args.modality}_{args.backbone}_{sampling_method}_seed {args.seed}_ep {args.epochs}_B {batch_size} T {seq_len}_{args.env}_{args.cam_view}_weights {args.weights}.png'))
     print("confusion matrix saved")
     results['test_loss'] = test_loss
     results['test_acc'] = test_acc
@@ -460,13 +516,13 @@ def train_and_evaluate(args):
     print(f'Test Acc: {test_acc:.4f}')
 
     # Save results to JSON file
-    results_path = os.path.join(results_dir, f'result_{args.backbone}_{args.modality}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.env}_{args.cam_view}.json')
+    results_path = os.path.join(results_dir, f'result_{args.backbone}_{args.modality}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.env}_{args.cam_view}_weights {args.weights}.json')
     with open(results_path, 'w') as f:
         json.dump(results, f)
     print("result saved")
     # Plot and save the training and validation loss and accuracy
     epochs = range(1, len(train_losses) + 1)
-    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.env}_{args.cam_view}.png')
+    savepath = os.path.join(figures_dir ,f'training_validation_loss_accuracy {args.modality}_{args.backbone}_{sampling_method}_B {batch_size} T {seq_len}_seed {args.seed}_ep {args.epochs}_{args.env}_{args.cam_view}_weights {args.weights}.png')
     plot_training_validation_loss_accuracy(epochs, train_losses, val_losses, train_accuracies, val_accuracies,
                                            args.seed, savepath)
     print("accuracy plot saved")

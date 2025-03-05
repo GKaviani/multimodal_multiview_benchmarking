@@ -12,7 +12,7 @@ from utils import plot_sequences
 
 
 class Custom3DDataset(Dataset):
-    def __init__(self, root_dir, include_classes, sequence_length=16, sampling="single-uniform", transform=None , max_seq=3 ):
+    def __init__(self, root_dir, include_classes, sequence_length=16, sampling="multi-uniform", transform=None , max_seq=3 ):
 
         self.root_dir = root_dir
         if "depth" in self.root_dir:
@@ -67,14 +67,14 @@ class Custom3DDataset(Dataset):
                                 sequence = frames[i:i + self.sequence_length]
                                 sequences.append((sequence, activity , unique_id))
                                 seq_counter += 1
-                    elif self.sampling == "multiple-random":
-                        seq_counter = 0
-                        for _ in range(0, len(frames) - self.sequence_length + 1):
-                            while seq_counter < self.number_of_seq :
-                                start_idx = random.randint(0, len(frames) - self.sequence_length)
-                                sequence = frames[start_idx:start_idx + self.sequence_length]
-                                sequences.append((sequence, activity , unique_id))
-                                seq_counter += 1
+                    # elif self.sampling == "multiple-random":
+                    #     seq_counter = 0
+                    #     for _ in range(0, len(frames) - self.sequence_length + 1):
+                    #         while seq_counter < self.number_of_seq :
+                    #             start_idx = random.randint(0, len(frames) - self.sequence_length)
+                    #             sequence = frames[start_idx:start_idx + self.sequence_length]
+                    #             sequences.append((sequence, activity , unique_id))
+                    #             seq_counter += 1
                     elif self.sampling == "single-random":
                         seq_counter = 0
                         while seq_counter < self.number_of_seq:
@@ -82,7 +82,7 @@ class Custom3DDataset(Dataset):
                             sequences.append((sequence, activity , unique_id))
                             # print(unique_id, subject_session, activity)
                             seq_counter += 1
-                    elif self.sampling == "single-uniform":
+                    elif self.sampling == "multi-uniform":
                         seq_counter = 0
                         while seq_counter < self.number_of_seq:
                             step = max(len(frames) // self.sequence_length, 1)
